@@ -33,6 +33,12 @@
     var button = document.getElementById("open");
     button.href = link;
     button.hidden = false;
+    // Once LawCase takes focus, close this tab so it isn't left behind. Browsers only
+    // allow this for a tab that was opened from another app and never navigated, which
+    // is how Notion opens it; otherwise the tab simply stays open with the button.
+    var closeWhenAway = function () { if (document.hidden || !document.hasFocus()) setTimeout(function () { window.close(); }, 300); };
+    window.addEventListener("blur", closeWhenAway);
+    document.addEventListener("visibilitychange", closeWhenAway);
     location.href = link;
   } else {
     document.getElementById("title").textContent = "This link is incomplete";
