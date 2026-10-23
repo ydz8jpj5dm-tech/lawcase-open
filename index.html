@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Open in LawCase</title>
+<style>
+  :root { --bg: #f7f5f0; --text: #1f2a3c; --muted: #6b7280; --accent: #1f3a5f; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #16181d; --text: #e8e6e1; --muted: #9ca3af; --accent: #8fb3e0; } }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--bg); color: var(--text);
+         font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; }
+  main { max-width: 420px; padding: 24px 16px; text-align: center; }
+  h1 { font-size: 20px; margin: 0 0 8px; }
+  p { color: var(--muted); margin: 0 0 20px; }
+  [hidden] { display: none !important; }
+  a.button { display: inline-block; padding: 10px 18px; border-radius: 8px; background: var(--accent); color: var(--bg); text-decoration: none; font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="title">Opening LawCase…</h1>
+  <p id="message">If nothing happens, use the button below.</p>
+  <a class="button" id="open" href="#" hidden>Open in LawCase</a>
+</main>
+<script>
+  // Notion only opens web links, so its links point here: <this page>#<case id>.
+  // The case id stays in the fragment, which is never sent to the server.
+  var id = decodeURIComponent(location.hash.slice(1)).trim();
+  var valid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+  if (valid) {
+    var link = "lawcase://case/" + id.toUpperCase();
+    var button = document.getElementById("open");
+    button.href = link;
+    button.hidden = false;
+    location.href = link;
+  } else {
+    document.getElementById("title").textContent = "This link is incomplete";
+    document.getElementById("message").textContent = "It has no LawCase case id. In LawCase, right-click the case and choose Copy LawCase link.";
+  }
+</script>
+</body>
+</html>
