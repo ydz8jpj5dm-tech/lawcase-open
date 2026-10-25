@@ -27,9 +27,12 @@
   // Notion only opens web links, so its links point here: <this page>#<case id>.
   // The case id stays in the fragment, which is never sent to the server.
   var id = decodeURIComponent(location.hash.slice(1)).trim();
-  var valid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+  var isCase = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+  // "#open/study/flashcards" and similar open a part of LawCase rather than a case.
+  var isPlace = /^open\/(dashboard|study|insights)(\/[a-z0-9-]+)?$/i.test(id);
+  var valid = isCase || isPlace;
   if (valid) {
-    var link = "lawcase://case/" + id.toUpperCase();
+    var link = isCase ? "lawcase://case/" + id.toUpperCase() : "lawcase://" + id.toLowerCase();
     var button = document.getElementById("open");
     button.href = link;
     button.hidden = false;
